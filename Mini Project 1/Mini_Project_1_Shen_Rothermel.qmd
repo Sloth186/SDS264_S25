@@ -86,7 +86,7 @@ This is a map of the states of the United States of America. Each has one of fou
 
 Link to Github for code, including that for the interactive plots
 
-
+https://github.com/Sloth186/SDS264_S25/tree/main/Mini%20Project%201
 
 ```{r}
 #| echo: false
