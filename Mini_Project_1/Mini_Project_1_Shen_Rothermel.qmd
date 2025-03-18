@@ -1,6 +1,6 @@
 ---
 title: "Mini Project 1 - Shen Rothermel"
-format: pdf
+format: html
 editor: source
 editor_options: 
   chunk_output_type: console

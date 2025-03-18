@@ -1,0 +1,93 @@
+---
+title: "R Tip of the Day"
+subtitle: "Timevis"
+author: "Shen Rothermel"
+date: "March 20, 2025"
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r Libraries}
+library(tidyverse)
+library(timevis)
+library(nycflights13)
+```
+
+## Timevis
+
+::: {.fragment .fade-in}
+Package for making timelines
+:::
+
+::: {.fragment .fade-in}
+```{r}
+timevis()
+```
+:::
+
+## Dataset
+
+::: {.fragment .fade-in}
+We will use the `flight`s dataset for our examples
+:::
+
+::: {.fragment .fade-in}
+```{r}
+head(flights)
+```
+:::
+
+::: {.fragment .fade-in}
+Each row contains information about a single flight, including the date it occurred, departure and arrival time, origin and destination, identifying information about the plane, etc.
+:::
+
+## Supplying a Data Frame
+
+::: {.fragment .fade-in}
+`timevis()` takes a `data frame`, which is a base R object type.
+:::
+
+::: {.fragment .fade-in}
+This data frame must at a minimum have a `content` and a `start` variable. The former determines what text to put in the box, and the latter determines where along the timeline to put the box.
+:::
+
+::: {.fragment .fade-in}
+With our `flights` dataset, we can do our usual tidyverse magic, then use the `as.data.frame()` function to easily convert it into a data frame.
+:::
+
+## Building the Data Frame
+
+```{.r code-line-numbers="0|1|2|3-4|5|6|0"}
+sample_flights <- flights |>
+	slice_sample(n = 5) |>
+	mutate(content = paste(origin, " to ", dest, sep = ""),
+				 start = paste(year, "-", month, "-", day, sep = "")) |>
+	select(content, start) |>
+	as.data.frame()
+sample_flights
+```
+
+::: {.fragment .fade-in}
+```{r}
+sample_flights <- flights |>
+	slice_sample(n = 5) |>
+	mutate(content = paste(origin, " to ", dest, sep = ""),
+				 start = paste(year, "-", month, "-", day, sep = "")) |>
+	select(content, start) |>
+	as.data.frame()
+sample_flights
+```
+:::
+
+## Visualize
+
+```{r}
+#| echo: true
+timevis(sample_flights)
+```
