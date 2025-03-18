@@ -14,9 +14,10 @@ editor_options:
 ---
 
 ```{r Libraries}
+library(nycflights13)
+library(stringr)
 library(tidyverse)
 library(timevis)
-library(nycflights13)
 ```
 
 ## Timevis
@@ -27,6 +28,7 @@ Package for making timelines
 
 ::: {.fragment .fade-in}
 ```{r}
+#| echo: true
 timevis()
 ```
 :::
@@ -63,11 +65,17 @@ With our `flights` dataset, we can do our usual tidyverse magic, then use the `a
 
 ## Building the Data Frame
 
-```{.r code-line-numbers="0|1|2|3-4|5|6|0"}
+```{.r code-line-numbers="0|1-4|6-7|8|9-10|11-12|0"}
+timevis_date <- function(year, month, day, time) {
+	paste(year, "-", month, "-", day, " ",
+	str_sub(time, 1, -3), ":", str_sub(time, -2, -1), sep = "")
+}
+
 sample_flights <- flights |>
+	filter(!is.na(dep_time), !is.na(arr_time)) |> 
 	slice_sample(n = 5) |>
 	mutate(content = paste(origin, " to ", dest, sep = ""),
-				 start = paste(year, "-", month, "-", day, sep = "")) |>
+				 start = timevis_date(year, month, day, dep_time)) |>
 	select(content, start) |>
 	as.data.frame()
 sample_flights
@@ -75,10 +83,16 @@ sample_flights
 
 ::: {.fragment .fade-in}
 ```{r}
+timevis_date <- function(year, month, day, time) {
+	paste(year, "-", month, "-", day, " ",
+				str_sub(time, 1, -3), ":", str_sub(time, -2, -1), sep = "")
+}
+
 sample_flights <- flights |>
+	filter(!is.na(dep_time), !is.na(arr_time)) |> 
 	slice_sample(n = 5) |>
 	mutate(content = paste(origin, " to ", dest, sep = ""),
-				 start = paste(year, "-", month, "-", day, sep = "")) |>
+				 start = timevis_date(year, month, day, dep_time)) |>
 	select(content, start) |>
 	as.data.frame()
 sample_flights
@@ -87,7 +101,36 @@ sample_flights
 
 ## Visualize
 
-```{r}
-#| echo: true
+```r
 timevis(sample_flights)
 ```
+
+```{r}
+timevis(sample_flights, height = 300)
+arrange(sample_flights, date(start))
+```
+
+## Point Events
+
+```{r}
+#| echo: true
+sample_flights <- sample_flights |> 
+	mutate(type = "point")
+sample_flights
+timevis(sample_flights)
+```
+
+## Ranged Event
+
+```{r}
+ranged_flight <- flights |> 
+	slice_max(air_time) |> 
+	mutate(content = paste(origin, " to ", dest, " | Departure: ", dep_time, " | Arrived: ", arr_time),
+				 start = timevis_date(year, month, day, dep_time),
+				 end = timevis_date(year, month, day, arr_time)) |> 
+	select(content, start, end) |> 
+	as.data.frame()
+ranged_flight
+timevis(ranged_flight)
+```
+
