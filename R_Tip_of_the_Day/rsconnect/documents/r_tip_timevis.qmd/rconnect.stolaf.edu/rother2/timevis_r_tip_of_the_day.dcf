@@ -1,0 +1,12 @@
+name: timevis_r_tip_of_the_day
+title: Timevis_R_Tip_of_the_Day
+username: rother2
+account: rother2
+server: rconnect.stolaf.edu
+hostUrl: https://rconnect.stolaf.edu/__api__
+appId: 860
+bundleId: 2277
+url: https://rconnect.stolaf.edu/content/cb2c3035-55a1-489b-809b-a4bcc4631907/
+version: 1
+asMultiple: FALSE
+asStatic: TRUE
